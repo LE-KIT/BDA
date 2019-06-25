@@ -45,17 +45,17 @@ def read_data_stromfluss(data_dir):
     return df
 
 def preprocessing_stromfluss(df, basic = False):
-    """Preprocessing für Stromfluss Datansatz von Smard
+    """Preprocessing für stromfluss Datansatz von Smard
 
     Parameters
     ----------
     df : pd.DataFrame
-        Stromfluss Datensatz von SMARD eingelesen und unbearbeitet
+        stromfluss Datensatz von SMARD eingelesen und unbearbeitet
 
     Returns
     -------
     pd.DataFrame
-        Stromfluss Datensatz von SMARD aufbereitet zur weiteren Verwendung
+        stromfluss Datensatz von SMARD aufbereitet zur weiteren Verwendung
     """
 
     # Time Formatting
@@ -139,29 +139,8 @@ def predict_lm(df, date):
 df = read_data_stromfluss('data/stromfluss')
 df = preprocessing_stromfluss(df, True)
 
-#Modify for lm
-df['Year'] = df['Date'].apply(lambda x: x.year)
-df['Month'] = df['Date'].apply(lambda x: x.month)
-df['Day'] = df['Date'].apply(lambda x: x.month)
-df['Hour'] = df['Date'].apply(lambda x: x.hour)
 
-#Create dateList
-dateList = list()
-dateList.append(pd.to_datetime("01/01/2016"))
-dateList.append(pd.to_datetime("01/06/2016"))
-dateList.append(pd.to_datetime("01/01/2017"))
-dateList.append(pd.to_datetime("01/06/2017"))
-dateList.append(pd.to_datetime("01/01/2018"))
-dateList.append(pd.to_datetime("01/06/2018"))
 
-#Predict with lm
-df_tmp = predict_validate('lm', df, dateList)
-
-#Predictions
-df_tmp[df_tmp['AE'] > 0]
-
-#MAE
-print('MAE is '+df_tmp[df_tmp['AE'] > 0].AE.mean())
 
 
 

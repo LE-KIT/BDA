@@ -22,17 +22,17 @@ def _create_datetime(row):
 
 
 def preprocessing_stromfluss(df):
-    """Preprocessing für Stromfluss Datansatz von Smard
+    """Preprocessing für stromfluss Datansatz von Smard
     
     Parameters
     ----------
     df : pd.DataFrame
-        Stromfluss Datensatz von SMARD eingelesen und unbearbeitet
+        stromfluss Datensatz von SMARD eingelesen und unbearbeitet
     
     Returns
     -------
     pd.DataFrame
-        Stromfluss Datensatz von SMARD aufbereitet zur weiteren Verwendung
+        stromfluss Datensatz von SMARD aufbereitet zur weiteren Verwendung
     """
 
     # Time Formatting
