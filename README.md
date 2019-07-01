@@ -29,4 +29,4 @@
 
 - Manchmal nützlich
 	- git commit --amend : Änderungen letztem commit hinzufügen
-	- git rebase : Am besten Doku anschauen. Kann man commits zusammenfassen, branches rebasen auf neue Verzweigung etc. 
+	- git rebase : Am besten Doku anschauen. Kann man commits zusammenfassen, branches rebasen auf neue Verzweigung etc 
