@@ -1,12 +1,19 @@
-# Business Data Anayltics Challenge
+# Preprocessing
 
-# Struktur
+## Schritte Preprocessing:
+- Fill Blanks/Nans
+- Outlier Detection 
 
-- bda: Enthält utility funktionen für modelle und validierung
-- data: Enthält alle (Roh-)Daten
-- scripts: Enthält Scripte für das Preprocessing
-- notebooks: Juypter Notebooks zum Vorführen von einzelnen Features
-- testing: Inhalte des Ordners testing werden nicht synchronisiert. Hier könnt ihr Sachen ablegen, um für euch Dinge auszuprobieren.
+## Ideen Feature Extraction: 
+- Wochentag (1-7)
+- Woche (1-55)
+- Moving Average der letzten x Tage aus jeweiligem Land 
+- Moving Average der letzten x Tage Gesamt Netto-Exporte
+
+## Neue Datenquellen:
+- Wetterdaten
+- Ausfälle Kraftwerke  
+
 
 
 # Nützliche Git Befehle
@@ -29,4 +36,4 @@
 
 - Manchmal nützlich
 	- git commit --amend : Änderungen letztem commit hinzufügen
-	- git rebase : Am besten Doku anschauen. Kann man commits zusammenfassen, branches rebasen auf neue Verzweigung etc 
+	- git rebase : Am besten Doku anschauen. Kann man commits zusammenfassen, branches rebasen auf neue Verzweigung etc. 

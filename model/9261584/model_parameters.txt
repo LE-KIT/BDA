@@ -1,0 +1,5 @@
+Type: CNN + MLP
+CNN Dimensions [16, 16]-0.5
+MLP Dimensions [64, 256]
+Learning Rate: 0.01
+Epochs: 10
