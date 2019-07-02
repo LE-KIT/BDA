@@ -14,6 +14,12 @@
 - Wetterdaten
 - Ausfälle Kraftwerke  
 
+## Nutzen
+`df_stromfluesse = prepare_stromfluesse("data/Stromfluss//")`
+`df_price = prepare_strompreise("data/Strompreise/")`
+`df_consumption = prepare_konsum_ger("data/Stromverbrauch_real/")`
+
+`df_daily_information = enrich_daily_information(df_price,df_consumption)`
 
 
 # Nützliche Git Befehle

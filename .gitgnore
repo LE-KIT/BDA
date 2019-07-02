@@ -1,1 +1,3 @@
 /testing/*
+*.hdf5
+.ipynb_checkpoint
