@@ -1,75 +1,75 @@
 Wetter Stationen - DE
 
-15000 Aachen-Orsbach
-00164 Angermünde
-00183 Arkona
-00232 Augsburg
-00282 Bamberg
-00403 Berlin-Dahlem (FU)
-00430 Berlin-Tegel
-00433 Berlin-Tempelhof
-00691 Bremen
-00722 Brocken
-00880 Cottbus
-00891 Cuxhaven
-01048 Dresden-Klotzsche
-01078 Düsseldorf
-01270 Erfurt-Weimar
-05516 Fehmarn
-01346 Feldberg/Schwarzwald
-01358 Fichtelberg
-01420 Frankfurt/Main
-01468 Freudenstadt
-01504 Fritzlar-Flugplatz
-05856 Fürstenzell
-01612 Gera-Leumnitz
-01639 Gießen/Wettenberg
-01684 Görlitz
-01757 Greifswald
-01832 Großer Arber
-05871 Hahn
-01975 Hamburg-Fuhlsbüttel
-02014 Hannover
-02115 Helgoland
-02261 Hof
-02290 Hohenpeißenberg
-02483 Kahler Asten
-02559 Kempten
-02564 Kiel-Holtenau
-02667 Köln-Bonn
-02712 Konstanz
-02812 Lahr
-02932 Leipzig/Halle
-00102 Leuchtturm Alte Weser
-02961 Leuchtturm Kiel
-03015 Lindenberg
-03032 List auf Sylt
-03126 Magdeburg
-05906 Mannheim
-03196 Marnitz
-03231 Meiningen
-01262 München-Flughafen
-01766 Münster/Osnabrück
-03552 Neuruppin
-03660 Nürburg-Barweiler
-03668 Nürnberg
-03730 Oberstdorf
-03761 Öhringen
-07341 Offenbach-Wetterpark
-03987 Potsdam
-04104 Regensburg
-04177 Rheinstetten
-04271 Rostock-Warnemünde
-04336 Saarbrücken/Ensheim
-04466 Schleswig
-04625 Schwerin
-04887 Stötten
-04911 Straubing
-04931 Stuttgart/Echterdingen
-05100 Trier-Petrisberg
-00954 UFS Deutsche Bucht
-01228 UFS TW Ems
-05371 Wasserkuppe
-05397 Weiden
-05705 Würzburg
-05792 Zugspitze
+15000 n Aachen-Orsbach
+00164 n Angermünde
+00183 n Arkona
+00232 s Augsburg
+00282 s Bamberg
+00403 n Berlin-Dahlem (FU)
+00430 n Berlin-Tegel
+00433 n Berlin-Tempelhof
+00691 n Bremen
+00722 n Brocken
+00880 n Cottbus
+00891 n Cuxhaven
+01048 s Dresden-Klotzsche
+01078 n Düsseldorf
+01270 s Erfurt-Weimar
+05516 n Fehmarn
+01346 s Feldberg/Schwarzwald
+01358 s Fichtelberg
+01420 s Frankfurt/Main
+01468 s Freudenstadt
+01504 n Fritzlar-Flugplatz
+05856 s Fürstenzell
+01612 s Gera-Leumnitz
+01639 s Gießen/Wettenberg
+01684 n Görlitz
+01757 n Greifswald
+01832 s Großer Arber
+05871 s Hahn
+01975 n Hamburg-Fuhlsbüttel
+02014 n Hannover
+02115 n Helgoland
+02261 s Hof
+02290 s Hohenpeißenberg
+02483 n Kahler Asten
+02559 s Kempten
+02564 n Kiel-Holtenau
+02667 n Köln-Bonn
+02712 s Konstanz
+02812 s Lahr
+02932 n Leipzig/Halle
+00102 n Leuchtturm Alte Weser
+02961 n Leuchtturm Kiel
+03015 s Lindenberg
+03032 n List auf Sylt
+03126 n Magdeburg
+05906 s Mannheim
+03196 n Marnitz
+03231 s Meiningen
+01262 s München-Flughafen
+01766 n Münster/Osnabrück
+03552 n Neuruppin
+03660 s Nürburg-Barweiler
+03668 s Nürnberg
+03730 s Oberstdorf
+03761 s Öhringen
+07341 s Offenbach-Wetterpark
+03987 n Potsdam
+04104 s Regensburg
+04177 s Rheinstetten
+04271 n Rostock-Warnemünde
+04336 s Saarbrücken/Ensheim
+04466 n Schleswig
+04625 n Schwerin
+04887 s Stötten
+04911 s Straubing
+04931 s Stuttgart/Echterdingen
+05100 s Trier-Petrisberg
+00954 n UFS Deutsche Bucht
+01228 n UFS TW Ems
+05371 s Wasserkuppe
+05397 s Weiden
+05705 s Würzburg
+05792 s Zugspitze
