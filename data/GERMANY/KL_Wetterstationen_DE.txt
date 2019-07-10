@@ -1,0 +1,75 @@
+Wetter Stationen - DE
+
+15000 Aachen-Orsbach
+00164 Angermünde
+00183 Arkona
+00232 Augsburg
+00282 Bamberg
+00403 Berlin-Dahlem (FU)
+00430 Berlin-Tegel
+00433 Berlin-Tempelhof
+00691 Bremen
+00722 Brocken
+00880 Cottbus
+00891 Cuxhaven
+01048 Dresden-Klotzsche
+01078 Düsseldorf
+01270 Erfurt-Weimar
+05516 Fehmarn
+01346 Feldberg/Schwarzwald
+01358 Fichtelberg
+01420 Frankfurt/Main
+01468 Freudenstadt
+01504 Fritzlar-Flugplatz
+05856 Fürstenzell
+01612 Gera-Leumnitz
+01639 Gießen/Wettenberg
+01684 Görlitz
+01757 Greifswald
+01832 Großer Arber
+05871 Hahn
+01975 Hamburg-Fuhlsbüttel
+02014 Hannover
+02115 Helgoland
+02261 Hof
+02290 Hohenpeißenberg
+02483 Kahler Asten
+02559 Kempten
+02564 Kiel-Holtenau
+02667 Köln-Bonn
+02712 Konstanz
+02812 Lahr
+02932 Leipzig/Halle
+00102 Leuchtturm Alte Weser
+02961 Leuchtturm Kiel
+03015 Lindenberg
+03032 List auf Sylt
+03126 Magdeburg
+05906 Mannheim
+03196 Marnitz
+03231 Meiningen
+01262 München-Flughafen
+01766 Münster/Osnabrück
+03552 Neuruppin
+03660 Nürburg-Barweiler
+03668 Nürnberg
+03730 Oberstdorf
+03761 Öhringen
+07341 Offenbach-Wetterpark
+03987 Potsdam
+04104 Regensburg
+04177 Rheinstetten
+04271 Rostock-Warnemünde
+04336 Saarbrücken/Ensheim
+04466 Schleswig
+04625 Schwerin
+04887 Stötten
+04911 Straubing
+04931 Stuttgart/Echterdingen
+05100 Trier-Petrisberg
+00954 UFS Deutsche Bucht
+01228 UFS TW Ems
+05371 Wasserkuppe
+05397 Weiden
+05705 Würzburg
+05792 Zugspitze

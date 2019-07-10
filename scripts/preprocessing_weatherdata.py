@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[73]:
+# In[1]:
 
 
 import pandas as pd
@@ -10,7 +10,7 @@ import os
 import glob
 
 
-# In[74]:
+# In[27]:
 
 
 # PART: DENMARK
@@ -18,12 +18,13 @@ import glob
 dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S') # Change dateformat
 
 # Data Import - DENMARK
-path = r'C:\\Data\\Uni\\KIT\\Master\\BWL\\BWL3_BDA\\Datenquellen\\DENMARK'
+#path = r'C:\\Data\\Uni\\KIT\\Master\\BWL\\BWL3_BDA\\Datenquellen\\DENMARK'
+path = 'data/DENMARK'
 all_Sonnenstunden = glob.glob(path + "\Sonnenstunden*.csv")
 all_Wind = glob.glob(path + "\Wind*.csv")
 
 
-# In[188]:
+# In[28]:
 
 
 # Data Import - DENMARK: sun
@@ -38,7 +39,7 @@ for filename in all_Sonnenstunden:
                      index_col=None, 
                      header=0)
     df.columns = df.columns.str.strip().str.lower()
-    df.rename(columns={'datetime':'date', 'sol':'sun_hrs'}, inplace=True)
+    df.rename(columns={'datetime':'date', 'sol':'DK_sun_hrs'}, inplace=True)
     list_sun.append(df)
 
 sun_DK = pd.concat(list_sun, axis=0, ignore_index=True) # append dataframes
@@ -48,7 +49,7 @@ print(sun_DK.describe())
 print(sun_DK.info())
 
 
-# In[190]:
+# In[29]:
 
 
 # Data Import - DENMARK: wind
@@ -64,9 +65,9 @@ for filename in all_Wind:
                      header=0)
     df.columns = df.columns.str.strip().str.lower()
     df.rename(columns={'datetime':'date', 
-                       'middel vindhastighed':'av_windSpeed_ms', 
-                       'højeste 10 min. middel':'maxAvg_windSpeed_ms', 
-                       'højeste vindstød':'max_windSpeed_ms'}, 
+                       'middel vindhastighed':'DK_av_windSpeed_ms', 
+                       'højeste 10 min. middel':'DK_maxAvg_windSpeed_ms', 
+                       'højeste vindstød':'DK_max_windSpeed_ms'}, 
               inplace=True)
     list_wind.append(df)
 
@@ -77,13 +78,23 @@ print(wind_DK.describe())
 print(wind_DK.info())
 
 
-# In[193]:
+# In[34]:
+
+
+# dataframe DENMARK with mean values per day
+
+denmark = sun_DK.merge(wind_DK, how='outer', on='date').drop(columns=['DK_maxAvg_windSpeed_ms', 'DK_max_windSpeed_ms'])
+print(denmark.head())
+
+
+# In[26]:
 
 
 # PART: GERMANY
 
 # Data Import - GERMANY
-path = r'C:\\Data\\Uni\\KIT\\Master\\BWL\\BWL3_BDA\\Datenquellen\\GERMANY'
+#path = r'C:\\Data\\Uni\\KIT\\Master\\BWL\\BWL3_BDA\\Datenquellen\\GERMANY'
+path = 'data/GERMANY'
 
 data_climate = glob.glob(path + "\produkt_klima_tag_*.txt")
 
@@ -93,16 +104,15 @@ for filename in data_climate:
                      sep=';',
                      na_values='-999',
                      header=0,
-                     usecols=[0,1,3,4,6,8],
+                     usecols=[0,1,4,6,8],
                      dtype={'STATIONS_ID':str},
                      parse_dates=['MESS_DATUM'])
     df.columns = df.columns.str.strip().str.lower()
     df.rename(columns={'stations_id': 'id', 
              'mess_datum': 'date', 
-             'fx':'max_windspeed_ms', 
-             'fm': 'av_windspeed_ms', 
-             'rsk': 'percip_mm',
-             'sdk': 'sun_hrs'},
+             'fm': 'DE_av_windspeed_ms', 
+             'rsk': 'DE_percip_mm',
+             'sdk': 'DE_sun_hrs'},
             inplace=True)
     df['id'] = df['id'].str.strip()
     ls.append(df)
@@ -113,14 +123,12 @@ print(climate_DE.head())
 print(climate_DE.describe())
 print(climate_DE.info())
 
-#print(climate_DE.groupby(['id'], sort=False).apply(lambda x: x.sort_values(['date'], ascending = True)).reset_index(drop=True).head())
-#print(climate_DE.groupby(['id'], sort=False)['date'].count())
+
+# In[25]:
 
 
-# In[191]:
+# dataframe GERMANY with mean values per day
 
-
-# test
-
-#...
+germany = climate_DE.groupby('date').apply(lambda group: group.mean(skipna = True)).drop(columns=['id'])
+print(germany.head())
 
