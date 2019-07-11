@@ -78,10 +78,25 @@ def split_datetime(df):
 
 def merge_datetime(df):
     '''
-    "Merges" split up datetime back together. Returning Dataframe only has one date column.
+    "Merges" split up datetime back together. Returned Dataframe only has one date column.
     :param df: pd.DataFrame with a column named "timestamp" containing a np.datetime64 timestamp.
     :return: pd.DataFrame 
     '''
     df['date']=df['timestamp'].apply(lambda x: (x * np.timedelta64(1,'s') + np.datetime64('1970-01-01T00:00:00Z')))
     df = df.drop(columns = ["year","month","weekday", "timestamp", "hour"])
     return df
+
+def make_hourly(df, freq='1H'):
+    '''
+    Resamples a Dataframe to contain one entry per hour by padding missing values.
+    :param df: pd.DataFrame containing less than one entry per hour, for example one entry per day.
+    :param freq: (optional) entry for the frequency, should be higher than in original df
+    :return: resampled pd.DataFrame
+    '''
+    date_key = df.select_dtypes(include=[np.datetime64]).columns[0]
+    df = df.set_index(df[date_key])
+    df = df.resample(freq).pad()
+    df = df.drop(columns=[date_key])
+    df = df.reset_index()
+    return df
+
