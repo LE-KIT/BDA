@@ -60,3 +60,28 @@ def walk_farward_validation(evaluation_sets: list, processing_function: object, 
 
     return({"id": model.__class__, "predictions" : predictions, "error": error})
 
+
+def split_datetime(df):
+    '''
+    Splits up a datetime column into year, month, weekday, hour and timestamp. Automatically selects the first column that has datetime values.
+    :param df: pd.DataFrame with a datetime column.
+    :return: pd.DataFrame containing new columns
+    '''
+    date_key = df.select_dtypes(include=[np.datetime64]).columns[0]
+    df['year']=df[date_key].apply(lambda x: x.year)
+    df['month']=df[date_key].apply(lambda x: x.month)
+    df['weekday']=df[date_key].apply(lambda x: x.isoweekday())
+    df['timestamp']=df[date_key].apply(lambda x:(x - np.datetime64('1970-01-01T00:00:00Z')) / np.timedelta64(1, 's'))
+    df['hour'] = df[date_key].apply(lambda x: x.hour)
+    df = df.drop(columns=[date_key])
+    return df
+
+def merge_datetime(df):
+    '''
+    "Merges" split up datetime back together. Returning Dataframe only has one date column.
+    :param df: pd.DataFrame with a column named "timestamp" containing a np.datetime64 timestamp.
+    :return: pd.DataFrame 
+    '''
+    df['date']=df['timestamp'].apply(lambda x: (x * np.timedelta64(1,'s') + np.datetime64('1970-01-01T00:00:00Z')))
+    df = df.drop(columns = ["year","month","weekday", "timestamp", "hour"])
+    return df
