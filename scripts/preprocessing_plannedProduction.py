@@ -3,6 +3,7 @@
 
 import pandas as pd
 import glob
+numberparse = lambda x: pd.np.float(x.replace(".", "").replace(",",".")) if x!="-" else np.nan
 
 def import_crossborderData_CZ(path = 'data/CZECH REPUBLIC/', file = 'crossborder_cz.csv'):
 
