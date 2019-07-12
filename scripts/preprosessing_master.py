@@ -8,6 +8,7 @@ import pandas as pd
 
 def import_data(useAllData = False):
 
+    numberparse = lambda x: pd.np.float(x.replace(".", "").replace(",",".")) if x!="-" else np.nan
 
 
     df = pd.merge(left=import_weatherData(),

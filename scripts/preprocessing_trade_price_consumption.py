@@ -8,6 +8,8 @@ import numpy as np
 
 from scripts.preprocessing_old import preprocessing_stromverbrauch
 
+numberparse = lambda x: pd.np.float(x.replace(".", "").replace(",",".")) if x!="-" else np.nan
+
 
 def import_foreignTradeData(path = 'data/Produktion und Infrastruktur/'):
 
