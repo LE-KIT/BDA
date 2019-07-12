@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from datetime import timedelta
+import os.path
+
+from scripts import predict_stromfluss, preprocessing_weatherdata
+
 
 def get_training_sets(df: object, training_window_width: int, evaluation_days: list)->list:
     '''
@@ -99,4 +103,107 @@ def make_hourly(df, freq='1H'):
     df = df.drop(columns=[date_key])
     df = df.reset_index()
     return df
+
+def create_master_df(path_to_data_dir="./data/"):
+    '''
+    Creates and saves the masterframe
+    :param path_to_data_dir:
+    :return:
+    '''
+    df = predict_stromfluss.read_data_stromfluss(path_to_data_dir + 'stromfluss')
+    df = predict_stromfluss.preprocessing_stromfluss(df)
+
+    def create_net_columns(df):
+        countries = ["NL", "CHE", "DNK", "CZE", "LUX", "SWE", "AUT", "FRA", "PL"]
+        for country in countries:
+            im_key = country + "_IM"
+            ex_key = country + "_EX"
+            df[country] = df[im_key] + df[ex_key]
+            df = df.drop(columns=[im_key, ex_key])
+        return df
+
+    df = create_net_columns(df)
+    df = df.rename(columns={"Date": "date"})
+
+    df_weather = preprocessing_weatherdata.import_weatherData()
+    df_weather = df_weather[df_weather['date'].dt.year >= 2015]
+    # make hourly
+    df_weather = make_hourly(df_weather)
+    df_weather = df_weather.drop(columns=df_weather.columns[8:])
+    df_weather = df_weather.drop(columns=[col for col in df_weather.columns if "percip" in col])
+    df_weather = df_weather.drop(columns=['DK_sun_hrs'])
+
+    df_24h_lag = df.copy()
+    df_24h_lag.set_index("date", inplace=True)
+    df_24h_lag = df_24h_lag.shift(+24)
+
+    def custom_column_mapper(df, append_str):
+        cols = df.columns
+        mapper = {}
+        for col in cols:
+            mapper[col] = col + append_str
+        return mapper
+
+    df_24h_lag.rename(columns=custom_column_mapper(df_24h_lag, "-24h"), inplace=True)
+    df_24h_lag.reset_index(inplace=True)
+
+    df_master = df.copy()
+    df_master = df_master.merge(df_24h_lag)
+    df_master = df_master.merge(df_weather)
+
+    # split up datetime information, keep date as index for easier manipulation
+    df_master.set_index(['date'], append=True, inplace=True, drop=False)
+    df_master = split_datetime(df_master)
+
+    # move datetime columns to the front for readibility
+
+    # It is bugged, i don't know why
+    def move_columns_to_front(df, front_column_names):
+        '''
+        Returns a list with reordered column names
+        '''
+        columns = list(df.columns)
+        for col in front_column_names:
+            if col not in columns:
+                front_column_names.remove(col)
+        for col in columns:
+            if col in front_column_names:
+                columns.remove(col)
+        result = front_column_names + columns
+        return result
+
+    # Static hotfix
+    def move_columns_to_front_static(df, front_column_names):
+        result = move_columns_to_front(df, front_column_names)
+        result.pop(-1)
+        result.pop(-1)
+        return result
+
+    column_order = move_columns_to_front_static(df_master,
+                                                front_column_names=["year", "month", "weekday", "hour", "timestamp"])
+    df_master = df_master.loc[:, column_order]
+    # Save to data
+    df_master.to_csv(path_to_data_dir + "df_master.csv")
+    print("saved df_master to: " + path_to_data_dir+"df_master.csv")
+    return df_master
+
+
+def load_master_df(path_to_data_dir="./data/", force_update=False):
+    '''
+    Tries to load master frame from given directory. If CSV file is not present, it will create one. Set force_update = True to reload data.
+    :param path_to_data_dir:
+    :return:
+    '''
+    result = None
+    try:
+        if force_update:
+            result = create_master_df(path_to_data_dir)
+        else:
+            result = pd.read_csv(path_to_data_dir + "df_master.csv", index_col=[0, 1])
+    except FileNotFoundError:
+        print("No master df found in specified location: creating one now. (This may take a while.)")
+        result = create_master_df(path_to_data_dir)
+    finally:
+        return result
+
 
