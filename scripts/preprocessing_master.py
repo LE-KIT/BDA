@@ -5,8 +5,10 @@ from scripts.preprocessing_plannedProduction import *
 from scripts.preprocessing_price_consumption import *
 from scripts.preprocessing_weatherdata import *
 
+import pandas as pd
 
-def import_data(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
+
+def preprocess_Rawdata(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
 
     df = pd.merge(left=import_weatherData(projectPath),
                   right=import_productionData(projectPath),
@@ -15,14 +17,19 @@ def import_data(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
                                     on='date',
                                     how='outer')
 
+    df.to_csv(projectPath + 'data/master_df.csv', sep=';', decimal=',', index=False)
 
     return df
 
-projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'
+def import_masterDataFrame(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/master_df.csv'):
 
-df = import_data(projectPath)
+    df_master = pd.read_csv(projectPath+path, sep=';', decimal=',')
 
-df.to_csv(projectPath + 'data/master_df.csv', sep=';', decimal=',', index=False)
+    return df_master
+
+
+
+
 
 
 
