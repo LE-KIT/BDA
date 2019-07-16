@@ -9,9 +9,11 @@ import re
 
 
 
-def import_crossborderData_CZ(path = 'data/CZECH REPUBLIC/', file = 'crossborder_cz.csv'):
+def import_crossborderData_CZ(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/CZECH REPUBLIC/', file = 'crossborder_cz.csv'):
 
-    df_crossborder_CZ = pd.read_csv(path+file,
+    print('Starting import_crossborderData_CZ')
+
+    df_crossborder_CZ = pd.read_csv(projectPath+path+file,
                                 usecols=[0, 9, 10],
                                 parse_dates=['Date'],
                                 date_parser=lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M'),
@@ -22,14 +24,17 @@ def import_crossborderData_CZ(path = 'data/CZECH REPUBLIC/', file = 'crossborder
     # MW --> MWh, no change necessary
 
     # Time format : 24-01-2018 12:34
-    df_crossborder_CZ['date'] = df_crossborder_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    #df_crossborder_CZ['date'] = df_crossborder_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
+    print('Finished import_crossborderData_CZ')
 
     return df_crossborder_CZ
 
-def import_crossborderData_DE(path = 'data/Produktion und Infrastruktur/'):
+def import_crossborderData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/Produktion und Infrastruktur/'):
 
-    files = glob.glob(path + "Kommerzieller_Au_enhandel*.csv")
+    print('Starting import_crossborderData_DE')
+
+    files = glob.glob(projectPath + path + "Kommerzieller_Au_enhandel*.csv")
 
     for i in range(len(files)):
         if i == 0:
@@ -84,16 +89,19 @@ def import_crossborderData_DE(path = 'data/Produktion und Infrastruktur/'):
         df_crossborder_DE.fillna(0, inplace=True)
 
         # Time format : 24-01-2018 12:34
-        df_crossborder_DE['date'] = df_crossborder_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+        #df_crossborder_DE['date'] = df_crossborder_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
+        print('Finished import_crossborderData_DE')
 
         return df_crossborder_DE
 
 
 
-def import_productionData_CZ(path='data/CZECH REPUBLIC/', file='planned_gen_cz.csv'):
+def import_productionData_CZ(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path='data/CZECH REPUBLIC/', file='planned_gen_cz.csv'):
 
-    df_production_CZ = pd.read_csv(path + file,
+    print('Starting import_productionData_CZ')
+
+    df_production_CZ = pd.read_csv(projectPath + path + file,
                                     usecols=[0,1],
                                     parse_dates=['Date'],
                                     header=2)
@@ -108,16 +116,20 @@ def import_productionData_CZ(path='data/CZECH REPUBLIC/', file='planned_gen_cz.c
     df_production_CZ['CZ_production_MW_planned'] = df_production_CZ['CZ_production_MW_planned'] / 24
 
     # Time format : 24-01-2018 12:34
-    df_production_CZ['date'] = df_production_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    #df_production_CZ['date'] = df_production_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    print('Finished import_productionData_CZ')
 
     return df_production_CZ
 
 
 
 
-def import_productionData_FR(path = 'data/FRANCE/'):
+def import_productionData_FR(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/FRANCE/'):
 
-    files = glob.glob(path + "planned_gen_*.csv")
+    print('Starting import_productionData_FR')
+
+    files = glob.glob(projectPath + path + "planned_gen_*.csv")
 
     for i in range(len(files)):
         if i == 0:
@@ -140,14 +152,18 @@ def import_productionData_FR(path = 'data/FRANCE/'):
     df_production_FR = df_production_FR.set_index('date').resample('H').sum().reset_index()
 
     # Time format : 24-01-2018 12:34
-    df_production_FR['date'] = df_production_FR['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    #df_production_FR['date'] = df_production_FR['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    print('Finished import_productionData_CZ')
 
     return df_production_FR
 
 
-def import_productionData_DE_planned(path = 'data/Produktion und Infrastruktur/'):
+def import_productionData_DE_planned(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/Produktion und Infrastruktur/'):
 
-    files = glob.glob(path + "Prognostizierte_Erzeugung*.csv")
+    print('Starting import_productionData_DE_planned')
+
+    files = glob.glob(projectPath + path + "Prognostizierte_Erzeugung*.csv")
 
     for i in range(len(files)):
         if i == 0:
@@ -173,15 +189,18 @@ def import_productionData_DE_planned(path = 'data/Produktion und Infrastruktur/'
     df_production_DE = df_production_DE.set_index('date').resample('H').sum().reset_index()
 
     # Time format : 24-01-2018 12:34
-    df_production_DE['date'] = df_production_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    #df_production_DE['date'] = df_production_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
+    print('Finished import_productionData_DE_planned')
 
     return df_production_DE
 
 
-def import_productionData_DE_actual(path = 'data/Produktion und Infrastruktur/'):
+def import_productionData_DE_actual(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/Produktion und Infrastruktur/'):
 
-    files = glob.glob(path + "Realisierte_Erzeugung*.csv")
+    print('Starting import_productionData_DE_actual')
+
+    files = glob.glob(projectPath + path + "Realisierte_Erzeugung*.csv")
 
     for i in range(len(files)):
         if i == 0:
@@ -206,29 +225,33 @@ def import_productionData_DE_actual(path = 'data/Produktion und Infrastruktur/')
     df_production_DE = df_production_DE.set_index('date').resample('H').sum().reset_index()
 
     # Time format : 24-01-2018 12:34
-    df_production_DE['date'] = df_production_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    #df_production_DE['date'] = df_production_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
+    print('Finished import_productionData_DE_actual')
 
     return df_production_DE
 
 
 
 
-def import_productionData():
+def import_productionData(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
 
-    productionData = import_productionData_FR().merge(right=import_crossborderData_CZ(),
+    print('Starting import_productionData')
+
+    productionData = import_productionData_FR().merge(right=import_crossborderData_CZ(projectPath),
                                                       on='date',
                                                       how='outer').merge(
-                                                            right=import_productionData_CZ(),
+                                                            right=import_productionData_CZ(projectPath),
                                                             on='date',
-                                                            how='outer').merge(right=import_productionData_DE_planned(),
+                                                            how='outer').merge(right=import_productionData_DE_planned(projectPath),
                                                                 on='date',
-                                                                how='outer').merge(right=import_productionData_DE_actual(),
+                                                                how='outer').merge(right=import_productionData_DE_actual(projectPath),
                                                                         on='date',
-                                                                        how='outer').merge(right=import_crossborderData_DE(),
+                                                                        how='outer').merge(right=import_crossborderData_DE(projectPath),
                                                                             on='date',
                                                                             how='outer')
                                                                                                       
+    print('Finished import_productionData')
 
     return productionData
 
