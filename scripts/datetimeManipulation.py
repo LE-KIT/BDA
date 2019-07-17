@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def make_hourly(df, freq='1H'):
     '''
     Resamples a Dataframe to contain one entry per hour by padding missing values.
