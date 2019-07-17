@@ -1,10 +1,13 @@
-import pandas as pd
-import numpy as np
-import re
 import os
-from datetime import datetime, timedelta
+import re
+from datetime import timedelta
+
+import numpy as np
+import pandas as pd
 from sklearn import linear_model as lm
+
 pd.options.mode.chained_assignment = None
+
 
 def _create_datetime(row):
     """Helper Function
@@ -21,6 +24,7 @@ def _create_datetime(row):
     """
     date = row.Datum.strftime("%Y-%m-%d") + " " + row.Uhrzeit
     return date
+
 
 def read_data_stromfluss(data_dir):
     """Read data from directory, get rid of '-' and NaN values, export a dataframe"""
@@ -44,7 +48,8 @@ def read_data_stromfluss(data_dir):
 
     return df
 
-def preprocessing_stromfluss(df, basic = False):
+
+def preprocessing_stromfluss(df, basic=False):
     """Preprocessing für stromfluss Datansatz von Smard
 
     Parameters
@@ -85,15 +90,17 @@ def preprocessing_stromfluss(df, basic = False):
     type_pattern = r"\((.*?)\)"
     country_pattern = r"(.*?) "
 
-    df.columns = list(df.columns[0:3]) + ['NX'] + [countries.get(re.search(country_pattern, col).group(1))+ "_"+ types.get(re.search(type_pattern, col).group(1)) for col in df.columns[4::]]
+    df.columns = list(df.columns[0:3]) + ['NX'] + [
+        countries.get(re.search(country_pattern, col).group(1)) + "_" + types.get(re.search(type_pattern, col).group(1))
+        for col in df.columns[4::]]
 
     # Netto Export
-    df["NX"] = df.iloc[:, 4:].sum(axis = 1)
-    
-    #Drop columns
-    df.drop(df.columns[1:3], axis=1, inplace = True)
+    df["NX"] = df.iloc[:, 4:].sum(axis=1)
 
-    #Export only Datetime and NX for basic analysis
+    # Drop columns
+    df.drop(df.columns[1:3], axis=1, inplace=True)
+
+    # Export only Datetime and NX for basic analysis
     if basic:
         df = df[['Date', 'NX']]
 
@@ -101,49 +108,42 @@ def preprocessing_stromfluss(df, basic = False):
 
 
 def predict_validate(model, df, dateList):
-	#Add fields for prediction and absolute error
+    # Add fields for prediction and absolute error
     df['NX P'] = np.nan
     df['AE'] = np.nan
-    
+
     if model == 'lm':
         for date in dateList:
-        	#Predict for dates in dateList
+            # Predict for dates in dateList
             df = predict_lm(df, date)
-            
+
     else:
         print('Another method')
-        #TBD
-    
+        # TBD
+
     return df
+
 
 def predict_lm(df, date):
-    #Train test split
+    # Train test split
     X = df[df['Date'] < date]
     Y = df[(df['Date'] >= date) & (df['Date'] < date + timedelta(days=1))]
-    
-    #Train & test
-    tmp = lm.LinearRegression().fit(X[['Year', 'Month', 'Day', 'Hour']], X['NX']).predict(Y[['Year', 'Month', 'Day', 'Hour']])
-    Y.at[:,'NX P'] = tmp
-    #Average error
-    Y.at[:,'AE'] = (Y['NX'] - Y['NX P']).apply(lambda x: abs(x))
-    
-    #Update df with AE information
-    df.update(Y)
-    
-    print('Mean average error for {} is: {}'.format(date, Y['AE'].mean()))
-    
-    return df
-    
 
-#Import data
+    # Train & test
+    tmp = lm.LinearRegression().fit(X[['Year', 'Month', 'Day', 'Hour']], X['NX']).predict(
+        Y[['Year', 'Month', 'Day', 'Hour']])
+    Y.at[:, 'NX P'] = tmp
+    # Average error
+    Y.at[:, 'AE'] = (Y['NX'] - Y['NX P']).apply(lambda x: abs(x))
+
+    # Update df with AE information
+    df.update(Y)
+
+    print('Mean average error for {} is: {}'.format(date, Y['AE'].mean()))
+
+    return df
+
+
+# Import data
 df = read_data_stromfluss('data/stromfluss')
 df = preprocessing_stromfluss(df, True)
-
-
-
-
-
-
-
-
-
