@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from scripts.datetimeManipulation import make_hourly
-
-import pandas as pd
 import glob
 
+import pandas as pd
 
-def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path='data/GERMANY/', regionsFile='KL_Wetterstationen_DE.txt'):
+from scripts.datetimeManipulation import make_hourly
 
+
+def import_weatherData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path='data/GERMANY/',
+                          regionsFile='KL_Wetterstationen_DE.txt'):
     print('Starting import_weatherData_DE')
 
     dateparse = lambda x: pd.datetime.strptime(x, '%Y%m%d%H')  # Change dateformat
@@ -39,6 +40,7 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
                                                parse_dates=['MESS_DATUM'],
                                                date_parser=dateparse),
                                    ignore_index=True)
+        print('Finished importing {}. rawdata for GERMANY: SUN of {} files'.format(i + 1, len(all_Sonne)))
 
     sun_DE.columns = sun_DE.columns.str.strip().str.lower()
     sun_DE.rename(columns={'stations_id': 'id',
@@ -48,8 +50,18 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     sun_DE['id'] = sun_DE['id'].str.strip()
 
     # Time format : 24-01-2018 12:34
-    #sun_DE['date'] = sun_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # sun_DE['date'] = sun_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
+    # Delete unnecessary rows
+    sun_DE = sun_DE[sun_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    sun_DE['Dummy'] = 1
+
+    if len(sun_DE.groupby(['date', 'id']).count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        sun_DE = sun_DE.groupby(['date', 'id']).mean().reset_index()
+
+    sun_DE.drop('Dummy', axis=1, inplace=True)
 
     # Data Import - GERMANY: WIND
     for i in range(len(all_Wind)):
@@ -72,6 +84,7 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
                                                  parse_dates=['MESS_DATUM'],
                                                  date_parser=dateparse),
                                      ignore_index=True)
+        print('Finished importing {}. rawdata for GERMANY: WIND of {} files'.format(i + 1, len(all_Wind)))
 
     wind_DE.columns = wind_DE.columns.str.strip().str.lower()
     wind_DE.rename(columns={'stations_id': 'id',
@@ -81,7 +94,18 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     wind_DE['id'] = wind_DE['id'].str.strip()
 
     # Time format : 24-01-2018 12:34
-    #wind_DE['date'] = wind_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # wind_DE['date'] = wind_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    # Delete unnecessary rows
+    wind_DE = wind_DE[wind_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    wind_DE['Dummy'] = 1
+
+    if len(wind_DE.groupby(['date', 'id']).count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        wind_DE = wind_DE.groupby(['date', 'id']).mean().reset_index()
+
+    wind_DE.drop('Dummy', axis=1, inplace=True)
 
     # Data Import - GERMANY: TEMPERATURE
     for i in range(len(all_Temperatur)):
@@ -104,6 +128,7 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
                                                  parse_dates=['MESS_DATUM'],
                                                  date_parser=dateparse),
                                      ignore_index=True)
+        print('Finished importing {}. rawdata for GERMANY: TEMPERATURE of {} files'.format(i + 1, len(all_Temperatur)))
 
     temp_DE.columns = temp_DE.columns.str.strip().str.lower()
     temp_DE.rename(columns={'stations_id': 'id',
@@ -113,14 +138,25 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     temp_DE['id'] = temp_DE['id'].str.strip()
 
     # Time format : 24-01-2018 12:34
-    #temp_DE['date'] = temp_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # temp_DE['date'] = temp_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    # Delete unnecessary rows
+    temp_DE = temp_DE[temp_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    temp_DE['Dummy'] = 1
+
+    if len(temp_DE.groupby(['date', 'id']).count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        temp_DE = temp_DE.groupby(['date', 'id']).mean().reset_index()
+
+    temp_DE.drop('Dummy', axis=1, inplace=True)
 
     # Merge data - GERMANY
     climate_DE = wind_DE.merge(right=sun_DE,
-                            on=['id', 'date'],
-                            how='outer').merge(right=temp_DE,
-                                            on=['id', 'date'],
-                                            how='outer')#,indicator=True)
+                               on=['id', 'date'],
+                               how='outer').merge(right=temp_DE,
+                                                  on=['id', 'date'],
+                                                  how='outer')  # ,indicator=True)
 
     # Weather stations and north-south distinction
     stations = pd.read_csv(projectPath + path + regionsFile,
@@ -134,7 +170,6 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     df_DE = pd.merge(left=climate_DE, right=stations, on='id', how='left')
     df_tmp = df_DE.groupby(['date', 'Region']).mean().reset_index()
 
-
     germany = pd.merge(left=df_tmp[df_tmp['Region'] == 'n'].drop(columns=['Region']),
                        right=df_tmp[df_tmp['Region'] == 's'].drop(columns=['Region']),
                        on='date',
@@ -146,9 +181,7 @@ def import_weatherData_DE(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     return germany
 
 
-
-def import_weatherData_DK(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path = 'data/DENMARK/'):
-
+def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', path='data/DENMARK/'):
     print('Starting import_weatherData_DK')
 
     # Data Sources
@@ -188,7 +221,18 @@ def import_weatherData_DK(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     sun_DK['DK_sun_hrs'] = sun_DK['DK_sun_hrs'] / 24
 
     # Time format : 24-01-2018 12:34
-    #sun_DK['date'] = sun_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # sun_DK['date'] = sun_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    # Delete unnecessary rows
+    sun_DK = sun_DK[sun_DK['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    sun_DK['Dummy'] = 1
+
+    if len(sun_DK.groupby('date').count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        sun_DK = sun_DK.groupby('date').mean().reset_index()
+
+    sun_DK.drop('Dummy', axis=1, inplace=True)
 
     # Data Import - DENMARK: wind
     for i in range(len(all_Wind)):
@@ -224,16 +268,29 @@ def import_weatherData_DK(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
     # [AVG Values] --> no further manipulation necessary
 
     # Time format : 24-01-2018 12:34
-    #wind_DK['date'] = wind_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # wind_DK['date'] = wind_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
-    denmark = sun_DK.merge(wind_DK, how='outer', on='date').drop(columns=['DK_maxAvg_windSpeed_ms', 'DK_max_windSpeed_ms'])
+    # Delete unnecessary rows
+    wind_DK = wind_DK[wind_DK['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    wind_DK['Dummy'] = 1
+
+    if len(wind_DK.groupby('date').count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        wind_DK = wind_DK.groupby('date').mean().reset_index()
+
+    wind_DK.drop('Dummy', axis=1, inplace=True)
+
+    denmark = sun_DK.merge(wind_DK, how='outer', on='date').drop(
+        columns=['DK_maxAvg_windSpeed_ms', 'DK_max_windSpeed_ms'])
 
     print('Finished import_weatherData_DK')
 
     return denmark
 
-def import_weatherData_FR(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', file = 'data/FRANCE/weather_fr.txt'):
 
+def import_weatherData_FR(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/',
+                          file='data/FRANCE/weather_fr.txt'):
     print('Starting import_weatherData_FR')
 
     # Data Import - FRANCE
@@ -253,14 +310,26 @@ def import_weatherData_FR(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
                       inplace=True)
 
     # Time format : 24-01-2018 12:34
-    #weather_FR['date'] = weather_FR['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # weather_FR['date'] = weather_FR['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    # Delete unnecessary rows
+    weather_FR = weather_FR[weather_FR['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    weather_FR['Dummy'] = 1
+
+    if len(weather_FR.groupby('date').count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        weather_FR = weather_FR.groupby('date').mean().reset_index()
+
+    weather_FR.drop('Dummy', axis=1, inplace=True)
 
     print('Finished import_weatherData_FR')
 
     return weather_FR
 
-def import_weatherData_CZ(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/', file = 'data/CZECH REPUBLIC/weather_cz.txt'):
 
+def import_weatherData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/',
+                          file='data/CZECH REPUBLIC/weather_cz.txt'):
     print('Starting import_weatherData_CZ')
 
     # Data Import - CZECH REPUBLIC
@@ -280,29 +349,38 @@ def import_weatherData_CZ(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_ak
                       inplace=True)
 
     # Time format : 24-01-2018 12:34
-    #weather_CZ['date'] = weather_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+    # weather_CZ['date'] = weather_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
+
+    # Delete unnecessary rows
+    weather_CZ = weather_CZ[weather_CZ['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
+    # Handle multiple datetime rows
+    weather_CZ['Dummy'] = 1
+
+    if len(weather_CZ.groupby('date').count()['Dummy'].where(lambda x: x != 1).dropna()) > 0:
+        weather_CZ = weather_CZ.groupby('date').mean().reset_index()
+
+    weather_CZ.drop('Dummy', axis=1, inplace=True)
 
     print('Finished import_weatherData_CZ')
 
     return weather_CZ
 
-def import_weatherData(projectPath = '/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
 
+def import_weatherData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
     print('Starting import_weatherData')
 
     weatherData = pd.merge(left=import_weatherData_FR(projectPath),
-                            right=pd.merge(
-                                        left=import_weatherData_DK(projectPath),
-                                        right=import_weatherData_CZ(projectPath),
-                                        on='date',
-                                        how='outer'),
-                            on='date',
-                            how='outer').merge(right=import_weatherData_DE(projectPath),
-                                               on='date',
-                                               how='outer')
+                           right=pd.merge(
+                               left=import_weatherData_DK(projectPath),
+                               right=import_weatherData_CZ(projectPath),
+                               on='date',
+                               how='outer'),
+                           on='date',
+                           how='outer').merge(right=import_weatherData_DE(projectPath),
+                                              on='date',
+                                              how='outer')
 
     print('Finished import_weatherData')
 
     return weatherData
-
-
