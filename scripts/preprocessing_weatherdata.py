@@ -15,9 +15,9 @@ def import_weatherData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     dateparse = lambda x: pd.datetime.strptime(x, '%Y%m%d%H')  # Change dateformat
 
     # Data Sources
-    all_Sonne = glob.glob(projectPath + path + "produkt_sd_stunde_*.txt")[0:5]
-    all_Wind = glob.glob(projectPath + path + "produkt_ff_stunde_*.txt")[0:5]
-    all_Temperatur = glob.glob(projectPath + path + "produkt_tu_stunde_*.txt")[0:5]
+    all_Sonne = glob.glob(projectPath + path + "produkt_sd_stunde_*.txt")
+    all_Wind = glob.glob(projectPath + path + "produkt_ff_stunde_*.txt")
+    all_Temperatur = glob.glob(projectPath + path + "produkt_tu_stunde_*.txt")
 
     # Data Import - GERMANY: SUN
     for i in range(len(all_Sonne)):
