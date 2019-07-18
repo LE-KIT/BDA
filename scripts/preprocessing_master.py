@@ -24,4 +24,3 @@ def import_masterDataFrame(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
     df_master = pd.read_csv(projectPath + path, sep=';', decimal=',')
 
     return df_master
-

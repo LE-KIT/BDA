@@ -29,7 +29,7 @@ def import_crossborderData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
 
     # Delete unnecessary rows
     df_crossborder_CZ = df_crossborder_CZ[
-        df_crossborder_CZ['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_crossborder_CZ['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_crossborder_CZ['Dummy'] = 1
@@ -50,6 +50,8 @@ def import_crossborderData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
 
     files = glob.glob(projectPath + path + "Kommerzieller_Au_enhandel*.csv")
 
+    dateparse = lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M')
+
     for i in range(len(files)):
         if i == 0:
             df_crossborder_DE = pd.read_csv(files[i],
@@ -57,6 +59,7 @@ def import_crossborderData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
                                             decimal=',',
                                             thousands='.',
                                             parse_dates=[['Datum', 'Uhrzeit']],
+                                            date_parser=dateparse,
                                             na_values='-')
         else:
             df_crossborder_DE = df_crossborder_DE.append(pd.read_csv(files[i],
@@ -64,6 +67,7 @@ def import_crossborderData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
                                                                      decimal=',',
                                                                      thousands='.',
                                                                      parse_dates=[['Datum', 'Uhrzeit']],
+                                                                     date_parser=dateparse,
                                                                      na_values='-'))
 
     # Rename columns
@@ -105,7 +109,7 @@ def import_crossborderData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
 
     # Delete unnecessary rows
     df_crossborder_DE = df_crossborder_DE[
-        df_crossborder_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_crossborder_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_crossborder_DE['Dummy'] = 1
@@ -125,6 +129,7 @@ def import_productionData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_a
     df_production_CZ = pd.read_csv(projectPath + path + file,
                                    usecols=[0, 1],
                                    parse_dates=['Date'],
+                                   date_parser=lambda x: pd.datetime.strptime(x, '%d.%m.%Y'),
                                    header=2)
 
     df_production_CZ.columns = ['date', 'CZ_production_MW_planned']
@@ -142,7 +147,7 @@ def import_productionData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_a
 
     # Delete unnecessary rows
     df_production_CZ = df_production_CZ[
-        df_production_CZ['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_production_CZ['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_production_CZ['Dummy'] = 1
@@ -162,15 +167,19 @@ def import_productionData_FR(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_a
 
     files = glob.glob(projectPath + path + "planned_gen_*.csv")
 
+    dateparse = lambda x: pd.datetime.strptime(x, '%d/%m/%Y %H:%M')
+
     for i in range(len(files)):
         if i == 0:
             df_production_FR = pd.read_csv(files[i],
                                            parse_dates=[['Date de production', 'Heures']],
+                                           date_parser=dateparse,
                                            # error_bad_lines=False,
                                            skipfooter=1)
         else:
             df_production_FR = df_production_FR.append(pd.read_csv(files[i],
                                                                    parse_dates=[['Date de production', 'Heures']],
+                                                                   date_parser=dateparse,
                                                                    # error_bad_lines=False,
                                                                    skipfooter=1))
 
@@ -188,7 +197,7 @@ def import_productionData_FR(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_a
 
     # Delete unnecessary rows
     df_production_FR = df_production_FR[
-        df_production_FR['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_production_FR['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_production_FR['Dummy'] = 1
@@ -209,6 +218,8 @@ def import_productionData_DE_planned(projectPath='/Users/ozumerzifon/Desktop/BDA
 
     files = glob.glob(projectPath + path + "Prognostizierte_Erzeugung*.csv")
 
+    dateparse = lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M')
+
     for i in range(len(files)):
         if i == 0:
             df_production_DE = pd.read_csv(files[i],
@@ -217,6 +228,7 @@ def import_productionData_DE_planned(projectPath='/Users/ozumerzifon/Desktop/BDA
                                            thousands='.',
                                            usecols=[0, 1, 2],
                                            parse_dates=[['Datum', 'Uhrzeit']],
+                                           date_parser=dateparse,
                                            na_values='-')
         else:
             df_production_DE = df_production_DE.append(pd.read_csv(files[i],
@@ -225,6 +237,7 @@ def import_productionData_DE_planned(projectPath='/Users/ozumerzifon/Desktop/BDA
                                                                    thousands='.',
                                                                    usecols=[0, 1, 2],
                                                                    parse_dates=[['Datum', 'Uhrzeit']],
+                                                                   date_parser=dateparse,
                                                                    na_values='-'))
 
     df_production_DE.columns = ['date', 'DE_production_MW_planned']
@@ -237,7 +250,7 @@ def import_productionData_DE_planned(projectPath='/Users/ozumerzifon/Desktop/BDA
 
     # Delete unnecessary rows
     df_production_DE = df_production_DE[
-        df_production_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_production_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_production_DE['Dummy'] = 1
@@ -258,6 +271,8 @@ def import_productionData_DE_actual(projectPath='/Users/ozumerzifon/Desktop/BDA-
 
     files = glob.glob(projectPath + path + "Realisierte_Erzeugung*.csv")
 
+    dateparse = lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M')
+
     for i in range(len(files)):
         if i == 0:
             df_production_DE = pd.read_csv(files[i],
@@ -265,6 +280,7 @@ def import_productionData_DE_actual(projectPath='/Users/ozumerzifon/Desktop/BDA-
                                            decimal=',',
                                            thousands='.',
                                            parse_dates=[['Datum', 'Uhrzeit']],
+                                           date_parser=dateparse,
                                            na_values='-')
         else:
             df_production_DE = df_production_DE.append(pd.read_csv(files[i],
@@ -272,9 +288,14 @@ def import_productionData_DE_actual(projectPath='/Users/ozumerzifon/Desktop/BDA-
                                                                    decimal=',',
                                                                    thousands='.',
                                                                    parse_dates=[['Datum', 'Uhrzeit']],
+                                                                   date_parser=dateparse,
                                                                    na_values='-'))
 
-    df_production_DE.rename(columns={'Datum_Uhrzeit': 'date'}, inplace=True)
+    cols = ['date']
+    for i in df_production_DE.columns[1:]:
+        cols.append('DE_production_' + i.replace('[MWh]', '_MW_actual'))
+    df_production_DE.columns = cols
+
     df_production_DE['DE_production_MW_actual'] = df_production_DE.iloc[:, 2:].sum(axis=1)
 
     # Sum of the values per hour # [MWh] --> MEAN VS SUM --> SUM, due to weird calculation in rawdata
@@ -285,7 +306,7 @@ def import_productionData_DE_actual(projectPath='/Users/ozumerzifon/Desktop/BDA-
 
     # Delete unnecessary rows
     df_production_DE = df_production_DE[
-        df_production_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_production_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_production_DE['Dummy'] = 1
