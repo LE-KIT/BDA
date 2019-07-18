@@ -53,7 +53,7 @@ def import_weatherData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # sun_DE['date'] = sun_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    sun_DE = sun_DE[sun_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    sun_DE = sun_DE[sun_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     sun_DE['Dummy'] = 1
@@ -97,7 +97,7 @@ def import_weatherData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # wind_DE['date'] = wind_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    wind_DE = wind_DE[wind_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    wind_DE = wind_DE[wind_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     wind_DE['Dummy'] = 1
@@ -141,7 +141,7 @@ def import_weatherData_DE(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # temp_DE['date'] = temp_DE['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    temp_DE = temp_DE[temp_DE['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    temp_DE = temp_DE[temp_DE['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     temp_DE['Dummy'] = 1
@@ -189,7 +189,6 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     all_Wind = glob.glob(projectPath + path + "Wind*.csv")
 
     # Data Import - DENMARK: sun
-    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')  # Change dateformat
 
     for i in range(len(all_Sonnenstunden)):
         if i == 0:
@@ -198,7 +197,6 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
                                  decimal=",",
                                  thousands=".",
                                  parse_dates=['DateTime'],
-                                 date_parser=dateparse,
                                  index_col=None,
                                  header=0)
         else:
@@ -207,7 +205,6 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
                                                decimal=",",
                                                thousands=".",
                                                parse_dates=['DateTime'],
-                                               date_parser=dateparse,
                                                index_col=None,
                                                header=0),
                                    ignore_index=True)
@@ -224,7 +221,7 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # sun_DK['date'] = sun_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    sun_DK = sun_DK[sun_DK['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    sun_DK = sun_DK[sun_DK['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     sun_DK['Dummy'] = 1
@@ -242,7 +239,6 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
                                   decimal=",",
                                   thousands=".",
                                   parse_dates=['DateTime'],
-                                  date_parser=dateparse,
                                   index_col=None,
                                   header=0)
         else:
@@ -251,7 +247,6 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
                                                  decimal=",",
                                                  thousands=".",
                                                  parse_dates=['DateTime'],
-                                                 date_parser=dateparse,
                                                  index_col=None,
                                                  header=0),
                                      ignore_index=True)
@@ -271,7 +266,7 @@ def import_weatherData_DK(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # wind_DK['date'] = wind_DK['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    wind_DK = wind_DK[wind_DK['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    wind_DK = wind_DK[wind_DK['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     wind_DK['Dummy'] = 1
@@ -313,7 +308,7 @@ def import_weatherData_FR(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # weather_FR['date'] = weather_FR['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    weather_FR = weather_FR[weather_FR['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    weather_FR = weather_FR[weather_FR['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     weather_FR['Dummy'] = 1
@@ -352,7 +347,7 @@ def import_weatherData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktu
     # weather_CZ['date'] = weather_CZ['date'].apply(lambda x: x.strftime('%d-%m-%Y %H:%M'))
 
     # Delete unnecessary rows
-    weather_CZ = weather_CZ[weather_CZ['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    weather_CZ = weather_CZ[weather_CZ['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     weather_CZ['Dummy'] = 1
