@@ -163,7 +163,7 @@ def rnn_proprocessing(df, target_country, last_training_day='2019-05-31'):
 
     return (train_X, train_y, test_X, test_y)
 
-def train_lstm(train_X, train_y, test_X, test_y, error_str="rmse", batch_size=20, epochs=50):
+def train_lstm(train_X, train_y, test_X, test_y, error_str="mse", batch_size=20, epochs=50):
     '''
     Train a 2 level stacked lstm on the given data.
     :param train_X:
