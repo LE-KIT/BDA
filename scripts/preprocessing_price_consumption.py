@@ -13,6 +13,7 @@ def import_priceData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'
     files = glob.glob(projectPath + path + "DE_Großhandelspreise*.csv")
 
     numberparse = lambda x: pd.np.float(x.replace(".", "").replace(",", ".")) if x != "-" else np.nan
+    dateparse = lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M')
 
     for i in range(len(files)):
         if i == 0:
@@ -21,16 +22,21 @@ def import_priceData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'
                                    decimal=r",",
                                    thousands=r".",
                                    converters={num: numberparse for num in np.arange(2, 22)},
-                                   parse_dates=[['Datum', 'Uhrzeit']])
+                                   parse_dates=[['Datum', 'Uhrzeit']],
+                                   date_parser=dateparse)
         else:
             df_price = df_price.append(pd.read_csv(files[i],
                                                    sep=";",
                                                    decimal=r",",
                                                    thousands=r".",
                                                    converters={num: numberparse for num in np.arange(2, 22)},
-                                                   parse_dates=[['Datum', 'Uhrzeit']]))
+                                                   parse_dates=[['Datum', 'Uhrzeit']],
+                                                   date_parser=dateparse))
 
-    df_price.rename(columns={'Datum_Uhrzeit': 'date'}, inplace=True)
+    cols = ['date']
+    for i in df_price.columns[1:]:
+        cols.append('price_' + i.replace('[Euro/MWh]', '_Euro_MWh'))
+    df_price.columns = cols
 
     df_price.drop_duplicates(inplace=True)
 
@@ -44,7 +50,7 @@ def import_priceData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'
     # ---
 
     # Delete unnecessary rows
-    df_price = df_price[df_price['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+    df_price = df_price[df_price['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_price['Dummy'] = 1
@@ -66,6 +72,7 @@ def import_consumptionData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
     files = glob.glob(projectPath + path + "DE_Realisierter Stromverbrauch*.csv")
 
     numberparse = lambda x: pd.np.float(x.replace(".", "").replace(",", ".")) if x != "-" else np.nan
+    dateparse = lambda x: pd.datetime.strptime(x, '%d.%m.%Y %H:%M')
 
     for i in range(len(files)):
         if i == 0:
@@ -74,7 +81,8 @@ def import_consumptionData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
                                          decimal=r",",
                                          thousands=r".",
                                          converters={num: numberparse for num in np.arange(2, 22)},
-                                         parse_dates=[['Datum', 'Uhrzeit']])
+                                         parse_dates=[['Datum', 'Uhrzeit']],
+                                         date_parser=dateparse)
         else:
             df_consumption = df_consumption.append(pd.read_csv(files[i],
                                                                sep=";",
@@ -82,9 +90,12 @@ def import_consumptionData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
                                                                thousands=r".",
                                                                converters={num: numberparse for num in
                                                                            np.arange(2, 22)},
-                                                               parse_dates=[['Datum', 'Uhrzeit']]))
+                                                               parse_dates=[['Datum', 'Uhrzeit']],
+                                                               date_parser=dateparse))
 
-    df_consumption.rename(columns={'Datum_Uhrzeit': 'date'}, inplace=True)
+    df_consumption.rename(columns={'Datum_Uhrzeit': 'date',
+                                   'Gesamt[MWh]': 'DE_consumption_MW'},
+                          inplace=True)
 
     # Sum of the values per hour # [MWh] --> MEAN VS SUM --> SUM, due to weird calculation in rawdata
     df_consumption = df_consumption.set_index('date').resample('H').sum().reset_index()
@@ -94,7 +105,7 @@ def import_consumptionData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
 
     # Delete unnecessary rows
     df_consumption = df_consumption[
-        df_consumption['date'] >= pd.to_datetime('01-06-2017 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+        df_consumption['date'] >= pd.to_datetime('01-06-2015 00:00:00', format='%d-%m-%Y %H:%M:%S')]
 
     # Handle multiple datetime rows
     df_consumption['Dummy'] = 1
