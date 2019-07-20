@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 import os.path
 
-from scripts import predict_stromfluss, preprocessing_weatherdata
+#from scripts import predict_stromfluss, preprocessing_weatherdata
 
 
 def get_training_sets(df: object, training_window_width: int, evaluation_days: list)->list:
@@ -65,19 +65,21 @@ def walk_farward_validation(evaluation_sets: list, processing_function: object, 
     return({"id": model.__class__, "predictions" : predictions, "error": error})
 
 
-def split_datetime(df):
+def split_datetime(df, date_key=None, drop_original=False):
     '''
     Splits up a datetime column into year, month, weekday, hour and timestamp. Automatically selects the first column that has datetime values.
     :param df: pd.DataFrame with a datetime column.
     :return: pd.DataFrame containing new columns
     '''
-    date_key = df.select_dtypes(include=[np.datetime64]).columns[0]
+    if date_key is None:
+        date_key = df.select_dtypes(include=[np.datetime64]).columns[0]
     df['year']=df[date_key].apply(lambda x: x.year)
     df['month']=df[date_key].apply(lambda x: x.month)
     df['weekday']=df[date_key].apply(lambda x: x.isoweekday())
     df['timestamp']=df[date_key].apply(lambda x:(x - np.datetime64('1970-01-01T00:00:00Z')) / np.timedelta64(1, 's'))
     df['hour'] = df[date_key].apply(lambda x: x.hour)
-    df = df.drop(columns=[date_key])
+    if drop_original:
+        df = df.drop(columns=[date_key])
     return df
 
 def merge_datetime(df):
