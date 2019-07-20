@@ -207,3 +207,21 @@ def load_master_df(path_to_data_dir="./data/", force_update=False):
         return result
 
 
+def find_missing_rows(df):
+    '''
+    Find rows where the previous entry is more than one hour in the past = find missing entries.
+    :param df:
+    :return: list of indices
+    '''
+    last_timestamp = df.iloc[0].name
+    index_list = []
+    index = 0
+    for date, row in df.iterrows():
+        current_timestamp = date
+        if(current_timestamp != (last_timestamp + timedelta(hours=1))):
+            index_list.append(index)
+        last_timestamp = current_timestamp
+        index = index + 1
+    index_list.pop(0)
+    return index_list
+
