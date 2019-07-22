@@ -119,7 +119,7 @@ def import_model_data(path_stromfluesse, path_additional_data,aggregate=False):
     df_stromfluesse = prepare_stromfluesse("data/Stromfluss/",aggregate)
     df_stromfluesse['Date'] =  pd.to_datetime(df_stromfluesse['Date'])
 
-    df_xData = import_masterDataFrame('/Users/zcjr/Documents/Uni/Master BDA/')
+    df_xData = import_masterDataFrame('./')
     df_xData['date'] =  pd.to_datetime(df_xData['date'])
 
     df = df_stromfluesse.merge(df_xData,how="left",left_on='Date',right_on="date")

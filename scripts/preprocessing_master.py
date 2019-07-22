@@ -22,7 +22,7 @@ def preprocess_Rawdata(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell
         df.iloc[:, 33:43].isnull().any(axis=1))].index).reset_index(drop=True)
 
     # Export to csv
-    df.to_csv(projectPath + 'data/master_df.csv', sep=';', decimal=',', index=False)
+    df.to_csv(   + 'data/master_df.csv', sep=';', decimal=',', index=False)
 
     return df
 
@@ -64,7 +64,7 @@ def import_masterDataFrame(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_akt
     price_cols = [col for col in df_master.columns if 'price' in col]
     shift_cols = actual_cols + price_cols + ['de_consumption_mw']
 
-    df_master[shift_cols] = df_master[shift_cols].shift(1)
+    df_master[shift_cols] = df_master[shift_cols].shift(24)
     df_master = df_master.drop(0,axis=0)
 
     df_master.drop('Tag',axis=1,inplace=True)

@@ -97,3 +97,13 @@ def plot_and_calculate_error(df_predictions,df_true_test_values,cols):
     
     mae = np.abs(Y - Y_hat).mean()
     print("MAE:\n{}\n\nGesamt:{}".format(mae,mae.mean()))
+
+def calculate_prediction_errors(df_predictions,df_true_eval_values,columns):
+    error_scale = np.abs(df_true_eval_values.sum())/np.abs(df_true_eval_values.sum()).sum()
+    y_hat = df_predictions[columns]
+    y = df_true_eval_values[columns].values
+
+    rse_scaled = np.sqrt( ((y-y_hat)**2).sum() ) * error_scale.values
+    rmse_scaled = np.sqrt( ((y-y_hat)**2).mean() ) * error_scale.values
+    print('CNN LSTM Scaled RMSE: {}'.format( rmse_scaled.sum()))
+    print("--------------------------\n")

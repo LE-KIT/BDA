@@ -324,7 +324,7 @@ def import_productionData_DE_actual(projectPath='/Users/ozumerzifon/Desktop/BDA-
 def import_productionData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell/'):
     print('Starting import_productionData')
 
-    productionData = import_productionData_FR().merge(right=import_crossborderData_CZ(projectPath),
+    productionData = import_productionData_FR(projectPath).merge(right=import_crossborderData_CZ(projectPath),
                                                       on='date',
                                                       how='outer').merge(
         right=import_productionData_CZ(projectPath),
