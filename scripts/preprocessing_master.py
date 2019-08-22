@@ -21,6 +21,9 @@ def preprocess_Rawdata(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell
     df = df.drop(df[(df['date'] < pd.to_datetime('02-06-2019 00:00:00', format='%d-%m-%Y %H:%M:%S')) & (
         df.iloc[:, 33:43].isnull().any(axis=1))].index).reset_index(drop=True)
 
+    # Consider data until 22-08-2019
+    df = df[df['date'] < pd.to_datetime('23-08-2019 00:00:00', format='%d-%m-%Y %H:%M:%S')]
+
     # Export to csv
     df.to_csv(   + 'data/master_df.csv', sep=';', decimal=',', index=False)
 
