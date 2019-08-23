@@ -21,6 +21,7 @@ def import_crossborderData_CZ(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_
     df_crossborder_CZ.columns = ['date', 'CZ_DE_sum_Trade_MW_actual', 'CZ_DE_sum_Trade_MW_planned']
     df_crossborder_CZ['CZ_DE_sum_Trade_MW_actual'] = df_crossborder_CZ['CZ_DE_sum_Trade_MW_actual'].apply(
         lambda x: x.replace(',', '.')).astype(float)
+    df_crossborder_CZ['CZ_DE_sum_Trade_MW_planned'] = df_crossborder_CZ['CZ_DE_sum_Trade_MW_planned'].astype(float)
 
     # MW --> MWh, no change necessary
 

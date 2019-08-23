@@ -378,4 +378,6 @@ def import_weatherData(projectPath='/Users/ozumerzifon/Desktop/BDA-ömer_aktuell
 
     print('Finished import_weatherData')
 
+    weatherData.to_csv('data/weather_df.csv', sep=';', decimal=',', index=False)
+
     return weatherData
